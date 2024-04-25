@@ -9,7 +9,12 @@ export default defineConfig({
       provider: 'istanbul',
       reporter: ['text', 'html'],
       include: ['src/**/*'],
-      exclude: ['src/**/*.test.ts', 'src/**/__tests__/**'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/**/__tests__/**',
+        'src/_config/**',
+        "src/shared/error/**"
+      ],
     }
   },
   resolve: {
@@ -18,7 +23,8 @@ export default defineConfig({
       "@domain": path.resolve(__dirname, "src/domain"),
       "@application": path.resolve(__dirname, "src/application"),
       "@infra": path.resolve(__dirname, "src/infra"),
-      "@presentation": path.resolve(__dirname, "src/presentation")
+      "@presentation": path.resolve(__dirname, "src/presentation"),
+      "@shared": path.resolve(__dirname, "src/shared"),
     }
   }
 })
