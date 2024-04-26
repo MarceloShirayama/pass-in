@@ -31,4 +31,14 @@ describe('PositiveNumberVO value object', () => {
       () => PositiveNumberVO.create(input)
     ).toThrow(new InvalidParamError(`${input.paramName} must be a positive number`))
   })
+
+  it.each([null, ""])('should return an error if value is null or undefined', (value) => {
+    const input = {
+      paramName: 'maximum attendees',
+      value
+    }
+    expect(
+      () => PositiveNumberVO.create(input)
+    ).toThrow(new InvalidParamError(`${input.paramName} is required`))
+  })
 })
