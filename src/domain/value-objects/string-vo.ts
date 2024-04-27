@@ -24,7 +24,7 @@ export class StringVO {
   }
 
   static #validate(input: StringVOIn) {
-    if (!input.value) throw new Error(`${input.paramName} is required`)
+    if (!input.value) throw new InvalidParamError(`${input.paramName} is required`)
     if (typeof input.value !== "string")
       throw new InvalidParamError(`${input.paramName} must be a string`)
     if (input.maxLength && input.value.length > input.maxLength)
