@@ -8,7 +8,7 @@ class InMemoryEventRepository implements EventRepository {
     this.events.push(event)
   }
 
-  async findByTitle(title: string): Promise<Event | null> {
+  async findByTitle(title: unknown): Promise<Event | null> {
     const event = this.events.find(event => event.props.title.value === title)
     if (!event) {
       return null
@@ -16,7 +16,7 @@ class InMemoryEventRepository implements EventRepository {
     return event
   }
 
-  async findById(id: string): Promise<Event | null> {
+  async findById(id: unknown): Promise<Event | null> {
     const event = this.events.find(event => event.props.id === id)
     if (!event) {
       return null

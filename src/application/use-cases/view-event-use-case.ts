@@ -25,9 +25,9 @@ export class ViewEventUseCase {
     let event: Event | null
 
     if (input.id) {
-      event = await this.eventRepository.findById(input.id as string)
+      event = await this.eventRepository.findById(input.id)
     } else if (input.title) {
-      event = await this.eventRepository.findByTitle(input.title as string)
+      event = await this.eventRepository.findByTitle(input.title)
     } else {
       throw new InvalidParamError("invalid input")
     }
