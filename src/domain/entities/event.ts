@@ -68,9 +68,12 @@ export class Event {
       detailsVO: details ? StringVO.create(
         { paramName: "details", value: details }
       ) : null,
-      maximumAttendeesVO: maximumAttendees ? PositiveNumberVO.create(
-        { paramName: "maximumAttendees", value: maximumAttendees }
-      ) : null
+      maximumAttendeesVO:
+        (maximumAttendees || Number.isFinite(maximumAttendees)) ?
+          PositiveNumberVO.create(
+            { paramName: "maximumAttendees", value: maximumAttendees }
+          ) :
+          null
     }
   }
 

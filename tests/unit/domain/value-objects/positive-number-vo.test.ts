@@ -12,20 +12,10 @@ describe('PositiveNumberVO value object', () => {
     expect(id!.value).toBe(10)
   })
 
-  it('should return an error with value is less than 0', () => {
+  it.each(['10', 0, -1, 1.1])('should return an error with value is less than 0', (value) => {
     const input = {
       paramName: 'maximum attendees',
-      value: -1
-    }
-    expect(
-      () => PositiveNumberVO.create(input)
-    ).toThrow(new InvalidParamError(`${input.paramName} must be a positive number`))
-  })
-
-  it('should return an error if value is not a number', () => {
-    const input = {
-      paramName: 'maximum attendees',
-      value: '10'
+      value
     }
     expect(
       () => PositiveNumberVO.create(input)

@@ -22,8 +22,17 @@ export class PositiveNumberVO {
   }
 
   static #validate(input: PositiveNumberVOIn) {
-    if (!input.value) throw new Error(`${input.paramName} is required`)
-    if (typeof input.value !== 'number' || input.value <= 0) throw new InvalidParamError(
+    if (
+      input.value !== 0 &&
+      (!input.value ||
+        input.value === undefined ||
+        input.value === null)
+    ) throw new Error(`${input.paramName} is required`)
+    if (
+      typeof input.value !== 'number' ||
+      !Number.isInteger(input.value) ||
+      input.value <= 0
+    ) throw new InvalidParamError(
       `${input.paramName} must be a positive number`
     )
     return input.value
