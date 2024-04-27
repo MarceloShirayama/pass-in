@@ -3,7 +3,8 @@ import { EventRepository } from "../repositories";
 import { InvalidParamError } from "@/shared/error";
 
 export type RegisterEventOut = {
-  name: string
+  id: string
+  title: string
   slug: string
   details?: string
   maximumAttendees?: number
@@ -25,7 +26,8 @@ export class RegisterEventUseCase {
     const event = Event.create(input)
     await this.eventRepository.save(event)
     return {
-      name: event.props.title.value,
+      id: event.props.id,
+      title: event.props.title.value,
       slug: event.props.slug,
       details: event.props.details?.value,
       maximumAttendees: event.props.maximumAttendees?.value,
