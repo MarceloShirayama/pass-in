@@ -1,7 +1,6 @@
 import { InvalidParamError } from "@/shared/error";
 import { RegisterEventUseCase } from "@application/use-cases";
 import { inMemoryEventRepository } from "@infra/repositories";
-import { triggerAsyncId } from "async_hooks";
 
 describe('RegisterEventUseCase', () => {
   const eventRepository = inMemoryEventRepository;

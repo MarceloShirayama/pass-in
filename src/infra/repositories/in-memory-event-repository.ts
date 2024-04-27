@@ -16,6 +16,14 @@ class InMemoryEventRepository implements EventRepository {
     return event
   }
 
+  async findById(id: string): Promise<Event | null> {
+    const event = this.events.find(event => event.props.id === id)
+    if (!event) {
+      return null
+    }
+    return event
+  }
+
   async clear(): Promise<void> {
     this.events = []
   }

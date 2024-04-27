@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import { app } from "@presentation/http/server";
+import { app } from "@/presentation/http/app";
 import { inMemoryEventRepository } from "@infra/repositories";
 
 describe('EventsRouter', () => {
