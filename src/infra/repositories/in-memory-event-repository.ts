@@ -15,6 +15,10 @@ class InMemoryEventRepository implements EventRepository {
     }
     return event
   }
+
+  async clear(): Promise<void> {
+    this.events = []
+  }
 }
 
 export const inMemoryEventRepository = new InMemoryEventRepository()
