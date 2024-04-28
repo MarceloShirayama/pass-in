@@ -9,7 +9,7 @@ type EventProps = {
   slug: string
   details: StringVO | null
   maximumAttendees: PositiveNumberVO | null
-  createdAt?: string
+  createdAt: string
 }
 
 export type CreateEventIn = {
@@ -41,7 +41,7 @@ export class Event {
     this.#slug = props.slug
     this.#details = props.details
     this.#maximumAttendees = props.maximumAttendees
-    this.#createdAt = props.createdAt ?? new Date().toISOString()
+    this.#createdAt = props.createdAt
   }
 
   get props() {
@@ -87,7 +87,8 @@ export class Event {
       title: titleVO,
       slug: slugVO,
       details: detailsVO,
-      maximumAttendees: maximumAttendeesVO
+      maximumAttendees: maximumAttendeesVO,
+      createdAt: new Date().toISOString()
     })
   }
 
@@ -114,9 +115,6 @@ export class Event {
       throw new Error("Event must be an instance of Event class");
     }
     const isEquals = obj1.props.id === obj2.props.id
-    if (!isEquals) {
-      throw new Error("Events are not equal");
-    }
     return isEquals
   }
 }

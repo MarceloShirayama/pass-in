@@ -58,9 +58,8 @@ describe('Event entity', () => {
     const event2 = Event.create({
       title: 'event 2',
     })
-    expect(() => Event.equals(event1, event2)).toThrow(
-      new Error("Events are not equal")
-    )
+    const isEquals = Event.equals(event1, event2)
+    expect(isEquals).toBe(false)
   })
 
   it('should return an error if any object is not an event', () => {
