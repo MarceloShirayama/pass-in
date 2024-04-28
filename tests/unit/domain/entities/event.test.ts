@@ -51,7 +51,7 @@ describe('Event entity', () => {
     )
   })
 
-  it('should return an error if events are not equal', () => {
+  it('should return false if events are not equal', () => {
     const event1 = Event.create({
       title: 'event 1',
     })
