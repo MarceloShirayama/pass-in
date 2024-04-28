@@ -5,17 +5,10 @@ import { inMemoryEventRepository } from "@infra/repositories";
 import { Event } from "@domain/entities";
 
 describe('ViewEventRouter', async () => {
-  let eventRepository = inMemoryEventRepository;
-  let server: any;
+  const eventRepository = inMemoryEventRepository;
 
   beforeEach(async () => {
-    eventRepository = inMemoryEventRepository;
     await eventRepository.clear();
-    server = app.listen();
-  })
-
-  afterEach(async () => {
-    server.close();
   })
 
   it('should be able to view an event by id', async () => {
