@@ -1,4 +1,4 @@
-import { NotFoundError } from "@/shared/error";
+import { InvalidParamError, NotFoundError } from "@/shared/error";
 import { ViewEventUseCase } from "@application/use-cases";
 import { Event } from "@domain/entities";
 import { inMemoryEventRepository } from "@infra/repositories";
@@ -50,23 +50,19 @@ describe('ViewEventUseCase', () => {
     expect(output).toHaveProperty('createdAt', event.props.createdAt)
   })
 
-  it('should return an error if search for event id an unregistered event', async () => {
+  it('should return null if search for event id an unregistered event', async () => {
     const input = {
       id: 'any id',
     }
-    expect(
-      () => useCase.execute(input)).rejects.toThrow(
-        new NotFoundError('event not found')
-      )
+    const output = await useCase.execute(input)
+    expect(output).toBeNull()
   })
 
-  it('should return an error if search for event title an unregistered event', async () => {
+  it('should return null if search for event title an unregistered event', async () => {
     const input = {
       title: 'any title',
     }
-    expect(
-      () => useCase.execute(input)).rejects.toThrow(
-        new NotFoundError('event not found')
-      )
+    const output = await useCase.execute(input)
+    expect(output).toBeNull()
   })
 })

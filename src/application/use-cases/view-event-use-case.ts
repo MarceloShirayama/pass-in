@@ -21,21 +21,15 @@ export class ViewEventUseCase {
     private eventRepository: EventRepository
   ) { }
 
-  async execute(input: ViewEventIn): Promise<ViewEventOut> {
+  async execute(input: ViewEventIn): Promise<ViewEventOut | null> {
     let event: Event | null
 
     if (input.id) {
       event = await this.eventRepository.findById(input.id)
-    } else if (input.title) {
-      event = await this.eventRepository.findByTitle(input.title)
     } else {
-      throw new InvalidParamError("invalid input")
+      event = await this.eventRepository.findByTitle(input.title)
     }
-
-    if (!event) {
-      throw new NotFoundError("event not found")
-    }
-    return {
+    return !event ? null : {
       id: event.props.id,
       title: event.props.title.value,
       slug: event.props.slug,
