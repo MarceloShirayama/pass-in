@@ -1,6 +1,6 @@
 import { CreateEventIn, Event } from "@domain/entities";
 import { EventRepository } from "../repositories";
-import { InvalidParamError } from "@/shared/error";
+import { ConflictError, InvalidParamError } from "@/shared/error";
 
 export type RegisterEventOut = {
   id: string
@@ -21,7 +21,7 @@ export class RegisterEventUseCase {
       .findByTitle(input.title as string)
 
     if (alreadyExistsEventWithSameTitle) {
-      throw new InvalidParamError("title already exists")
+      throw new ConflictError("title already exists")
     }
     const event = Event.create(input)
     await this.eventRepository.save(event)

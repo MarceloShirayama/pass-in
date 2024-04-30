@@ -1,9 +1,9 @@
 export class InternalServerError extends Error {
   statusCode: number;
 
-  constructor() {
+  constructor(message: string) {
     super();
-    this.message = "Internal Server Error";
+    this.message = message;
     this.statusCode = 500
     this.name = "InternalServerError";
   }

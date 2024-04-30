@@ -13,7 +13,8 @@
     "test:unit:watch": "vitest unit --passWithNoTests",
     "test:integration": "vitest run integration --passWithNoTests",
     "test:integration:watch": "vitest integration --passWithNoTests",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "show:project": "tree -a -I 'node_modules|.git|coverage|dist|.vscode'"
   },
   "keywords": [],
   "author": "",
