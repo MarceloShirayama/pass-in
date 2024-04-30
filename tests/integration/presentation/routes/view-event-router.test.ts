@@ -67,4 +67,12 @@ describe('ViewEventRouter', async () => {
     expect(response.status).toBe(404)
     expect(response.body).toHaveProperty('error', 'event not found')
   })
+
+  it('should return an error if search for event title and title is not provided', async () => {
+    const response = await request(app)
+      .get('/events/search?title=')
+      .send()
+    expect(response.status).toBe(400)
+    expect(response.body).toHaveProperty('error', 'title is required')
+  })
 })
