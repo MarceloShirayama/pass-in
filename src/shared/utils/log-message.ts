@@ -10,11 +10,12 @@ export const LEVEL = {
 
 type Level = keyof typeof LEVEL
 
-export function logMessage(message: object, level: Level) {
+export function logMessage(message: object | string, level: Level) {
   const dirLogs = LOG_ERROR.DIR_LOGS
   const logFilePath = LOG_ERROR.FILE_LOG
   const currentDate = new Date().toLocaleString();
-  const logContent = `[${currentDate}] - ${level} - ${JSON.stringify({ ...message, timestamp: currentDate }, null, 2).replace(/\\n/g, '\n')}\n`
+  const messageContent = typeof message === 'string' ? message : JSON.stringify(message, null, 2).replace(/\\n/g, '\n')
+  const logContent = `[${currentDate}] - ${level} - ${messageContent}\n`
   switch (level) {
     case LEVEL.ERROR:
     case LEVEL.WARN:
