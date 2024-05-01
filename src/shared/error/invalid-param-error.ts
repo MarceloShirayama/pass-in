@@ -1,4 +1,6 @@
-export class InvalidParamError extends Error {
+import { CustomError } from "./custom-error";
+
+export class InvalidParamError extends CustomError {
   statusCode: number
 
   constructor(message: string) {

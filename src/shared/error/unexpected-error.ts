@@ -1,4 +1,6 @@
-export class UnexpectedError extends Error {
+import { CustomError } from "./custom-error";
+
+export class UnexpectedError extends CustomError {
   statusCode: number;
 
   constructor() {

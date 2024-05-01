@@ -1,5 +1,7 @@
-export class ConflictError extends Error {
-  statusCode = 409
+import { CustomError } from "./custom-error";
+
+export class ConflictError extends CustomError {
+  statusCode: number;
 
   constructor(message: string) {
     super(message);

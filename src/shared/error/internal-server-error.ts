@@ -1,4 +1,6 @@
-export class InternalServerError extends Error {
+import { CustomError } from "./custom-error";
+
+export class InternalServerError extends CustomError {
   statusCode: number;
 
   constructor(message: string) {
