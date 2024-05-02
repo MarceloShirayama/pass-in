@@ -2,7 +2,6 @@ import express from "express";
 
 import { handleErrorsMiddleware, routeNotFoundMiddleware } from "@presentation/http/middlewares";
 import { eventsRouter } from "@presentation/http/routes";
-import { LOG_ERROR } from "@/_config/settings";
 
 export const app = express();
 
