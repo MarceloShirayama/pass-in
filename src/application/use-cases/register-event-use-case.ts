@@ -1,6 +1,8 @@
-import { CreateEventIn, Event } from "@domain/entities";
+import { Event, CreateEventIn } from "@domain/entities";
 import { EventRepository } from "../repositories";
 import { ConflictError, InvalidParamError } from "@/shared/error";
+
+type RegisterEventIn = CreateEventIn
 
 export type RegisterEventOut = {
   id: string
@@ -16,7 +18,7 @@ export class RegisterEventUseCase {
     private readonly eventRepository: EventRepository
   ) { }
 
-  async execute(input: CreateEventIn): Promise<RegisterEventOut> {
+  async execute(input: RegisterEventIn): Promise<RegisterEventOut> {
     const alreadyExistsEventWithSameTitle = await this.eventRepository
       .findByTitle(input.title as string)
 

@@ -13,7 +13,6 @@ describe('Event entity', () => {
     const event_restored = Event.restore({
       id: event.props.id,
       title: event.props.title.value,
-      slug: event.props.slug,
       details: event.props.details?.value,
       maximumAttendees: event.props.maximumAttendees?.value,
       createdAt: event.props.createdAt

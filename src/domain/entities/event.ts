@@ -18,15 +18,6 @@ export type CreateEventIn = {
   maximumAttendees?: unknown
 }
 
-export type RestoreEventIn = {
-  id: string
-  title: unknown
-  slug: unknown
-  details?: unknown
-  maximumAttendees?: unknown
-  createdAt: string
-}
-
 export class Event {
   #id: string
   #title: StringVO
@@ -92,7 +83,7 @@ export class Event {
     })
   }
 
-  static restore(input: RestoreEventIn) {
+  static restore(input: CreateEventIn & { id: string, createdAt: string }) {
     const {
       titleVO, slugVO, detailsVO, maximumAttendeesVO
     } = Event.#valueOjectHandler({
