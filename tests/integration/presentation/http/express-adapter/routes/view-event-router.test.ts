@@ -1,11 +1,13 @@
 import request from 'supertest';
 
-import { app } from "@/presentation/http/app";
+import { ExpressAdapter } from "@/presentation/http/express-adapter";
 import { inMemoryEventRepository } from "@infra/repositories";
 import { Event } from "@domain/entities";
 
 describe('ViewEventRouter', async () => {
   const eventRepository = inMemoryEventRepository;
+  const server = new ExpressAdapter();
+  const app = server.application;
 
   beforeEach(async () => {
     await eventRepository.clear();
