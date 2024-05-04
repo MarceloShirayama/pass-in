@@ -40,24 +40,16 @@ export class Attendee {
     }
   }
 
-  static #valueObjectHandler({ name, email }: { name: string, email: string }) {
-    return {
-      nameVO: StringVO.create({
-        paramName: 'name',
-        value: name,
-        maxLength: 255,
-        minLength: 3
-      }),
-      emailVO: EmailVO.create(email)
-    }
-  }
-
   static create({ name, email, eventId }: CreateAttendeeIn) {
-    const { nameVO, emailVO } = this.#valueObjectHandler({ name, email })
     return new Attendee({
       id: randomUUID(),
-      name: nameVO,
-      email: emailVO,
+      name: StringVO.create({
+        paramName: 'name',
+        value: name,
+        minLength: 3,
+        maxLength: 255
+      }),
+      email: EmailVO.create(email),
       eventId,
       createdAt: new Date().toISOString()
     })
@@ -67,11 +59,10 @@ export class Attendee {
     id, name, email, eventId, createdAt
   }: CreateAttendeeIn & { id: string, createdAt: string }
   ) {
-    const { nameVO, emailVO } = this.#valueObjectHandler({ name, email })
     return new Attendee({
       id,
-      name: nameVO,
-      email: emailVO,
+      name: StringVO.create({ paramName: 'name', value: name }),
+      email: EmailVO.create(email),
       eventId,
       createdAt
     })

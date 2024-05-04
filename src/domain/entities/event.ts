@@ -46,57 +46,40 @@ export class Event {
     }
   }
 
-  static #valueOjectHandler(
-    {
-      title, details, maximumAttendees
-    }: { title: unknown, details?: unknown, maximumAttendees?: unknown }
-  ) {
-    return {
-      titleVO: StringVO.create(
-        { paramName: "title", value: title, maxLength: 50, minLength: 3 }
-      ),
-      slugVO: slugifyText(title as string),
-      detailsVO: details ? StringVO.create(
-        { paramName: "details", value: details }
-      ) : null,
-      maximumAttendeesVO:
-        (maximumAttendees || Number.isFinite(maximumAttendees)) ?
-          PositiveNumberVO.create(
-            { paramName: "maximumAttendees", value: maximumAttendees }
-          ) :
-          null
-    }
-  }
-
   static create(input: CreateEventIn) {
-    const id = randomUUID()
-    const {
-      titleVO, slugVO, detailsVO, maximumAttendeesVO
-    } = Event.#valueOjectHandler(input)
     return new Event({
-      id,
-      title: titleVO,
-      slug: slugVO,
-      details: detailsVO,
-      maximumAttendees: maximumAttendeesVO,
+      id: randomUUID(),
+      title: StringVO.create(
+        { paramName: "title", value: input.title, maxLength: 50, minLength: 3 }
+      ),
+      slug: slugifyText(input.title),
+      details: input.details ? StringVO.create(
+        { paramName: "details", value: input.details }
+      ) : null,
+      maximumAttendees: (input.maximumAttendees || Number.isFinite(input.maximumAttendees)) ?
+        PositiveNumberVO.create(
+          { paramName: "maximumAttendees", value: input.maximumAttendees }
+        ) :
+        null,
       createdAt: new Date().toISOString()
     })
   }
 
   static restore(input: CreateEventIn & { id: string, createdAt: string }) {
-    const {
-      titleVO, slugVO, detailsVO, maximumAttendeesVO
-    } = Event.#valueOjectHandler({
-      title: input.title,
-      details: input.details,
-      maximumAttendees: input.maximumAttendees
-    })
     return new Event({
       id: input.id,
-      title: titleVO,
-      slug: slugVO,
-      details: detailsVO,
-      maximumAttendees: maximumAttendeesVO,
+      title: StringVO.create({ paramName: 'title', value: input.title }),
+      slug: slugifyText(input.title),
+      details:
+        input.details ?
+          StringVO.create({ paramName: 'details', value: input.details }) :
+          null,
+      maximumAttendees:
+        input.maximumAttendees ?
+          PositiveNumberVO.create(
+            { paramName: 'maximumAttendees', value: input.maximumAttendees }
+          ) :
+          null,
       createdAt: input.createdAt
     })
   }
