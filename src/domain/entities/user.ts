@@ -2,11 +2,19 @@ import { randomUUID } from "node:crypto";
 
 import { PasswordVO, StringVO } from "../value-objects"
 
+export const Role = {
+  "ORGANIZER": "ORGANIZER",
+  "ATTENDEE": "ATTENDEE"
+} as const
+
+export type Role = keyof typeof Role
+
 type UserProps = {
   id: string
   name: StringVO
   username: StringVO
   password: PasswordVO
+  role: Role
   createdAt: string
 }
 
@@ -21,6 +29,7 @@ export type RestoreUserIn = {
   name: unknown
   username: unknown
   password: unknown
+  role: Role
   createdAt: string
 }
 
@@ -29,6 +38,7 @@ export class User {
   #name: StringVO
   #username: StringVO
   #password: PasswordVO
+  #role: Role
   #createdAt: string
 
   private constructor(props: UserProps) {
@@ -36,6 +46,7 @@ export class User {
     this.#name = props.name
     this.#username = props.username
     this.#password = props.password
+    this.#role = props.role
     this.#createdAt = props.createdAt
   }
 
@@ -45,57 +56,38 @@ export class User {
       name: this.#name,
       username: this.#username,
       password: this.#password,
+      role: this.#role,
       createdAt: this.#createdAt
     }
   }
 
-  static #valueObjectHandler({ name, username, password }:
-    { name: unknown, username: unknown, password: unknown }) {
-    return {
-      name: StringVO.create({
-        paramName: 'name',
-        value: name,
-        minLength: 3,
-        maxLength: 100
-      }),
-      username: StringVO.create({
-        paramName: 'username',
-        value: username,
-        minLength: 3,
-        maxLength: 50
-      }),
-      password: PasswordVO.create({
-        value: password,
-        minLength: 8,
-        maxLength: 20
-      })
-    }
-  }
-
   static create(input: CreateUserIn) {
-    const id = randomUUID()
-    const { name, username, password } = User.#valueObjectHandler(input)
     return new User({
-      id,
-      name,
-      username,
-      password,
+      id: randomUUID(),
+      name: StringVO.create({ paramName: 'name', value: input.name }),
+      username: StringVO.create({ paramName: 'username', value: input.username }),
+      password: PasswordVO.create({ value: input.password }),
+      role: 'ATTENDEE',
       createdAt: new Date().toISOString()
     })
   }
 
   static restore(input: RestoreUserIn) {
-    const { name, username, password } = User.#valueObjectHandler(input)
     return new User({
       id: input.id,
-      name,
-      username,
-      password,
+      name: StringVO.create({ paramName: 'name', value: input.name }),
+      username: StringVO.create({ paramName: 'username', value: input.username }),
+      password: PasswordVO.restore(input.password),
+      role: input.role,
       createdAt: input.createdAt
     })
   }
 
-  static equals(obj1: unknown, obj2: unknown) {
+  set role(role: Role) {
+    this.#role = role
+  }
+
+  static equals(obj1: unknown, obj2: unknown): boolean {
     if (obj1 instanceof User === false || obj2 instanceof User === false) {
       throw new Error("User must be an instance of User class");
     }

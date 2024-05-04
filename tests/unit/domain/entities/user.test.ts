@@ -11,15 +11,26 @@ describe('User entity', () => {
     expect(user).toBeInstanceOf(User)
     expect(user.props.name.value).toBe(input.name)
     expect(user.props.username.value).toBe(input.username)
-    expect(user.props.password.value).toBe(input.password)
+    expect(user.props.password.value).toBeTruthy()
     const user_restored = User.restore({
       id: user.props.id,
       name: user.props.name.value,
       username: user.props.username.value,
       password: user.props.password.value,
+      role: user.props.role,
       createdAt: user.props.createdAt
     })
     expect(User.equals(user_restored, user)).toBe(true)
+  })
+
+  it('should be to make a user an organizer', () => {
+    const user = User.create({
+      name: 'any name',
+      username: 'any username',
+      password: 'anyPassword*1'
+    })
+    user.role = 'ORGANIZER'
+    expect(user.props.role).toBe('ORGANIZER')
   })
 
   it('should return false if users are not equal', () => {
