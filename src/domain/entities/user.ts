@@ -66,7 +66,11 @@ export class User {
       id: randomUUID(),
       name: StringVO.create({ paramName: 'name', value: input.name }),
       username: StringVO.create({ paramName: 'username', value: input.username }),
-      password: PasswordVO.create({ value: input.password }),
+      password: PasswordVO.create({
+        value: input.password,
+        minLength: 8,
+        maxLength: 50
+      }),
       role: 'ATTENDEE',
       createdAt: new Date().toISOString()
     })
