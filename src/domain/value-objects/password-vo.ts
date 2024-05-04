@@ -1,4 +1,5 @@
 import { InvalidParamError } from "@/shared/error"
+import { Encrypt } from "@/shared/utils"
 
 type PasswordVOIn = {
   value: unknown
@@ -19,7 +20,11 @@ export class PasswordVO {
 
   static create(input: PasswordVOIn) {
     const validInput = this.#checkPasswordStrength(input)
-    return new PasswordVO(validInput)
+    return new PasswordVO(Encrypt.hash(validInput))
+  }
+
+  static restore(value: unknown) {
+    return new PasswordVO(value as string)
   }
 
   static #checkPasswordStrength(input: PasswordVOIn): string {

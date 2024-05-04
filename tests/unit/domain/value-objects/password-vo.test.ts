@@ -8,7 +8,17 @@ describe('PasswordVO value object', () => {
     }
     const password = PasswordVO.create(input)
     expect(password).toBeInstanceOf(PasswordVO)
-    expect(password!.value).toBe(input.value)
+    expect(password.value).toBeTruthy()
+    expect(password.value).not.toBe(input.value)
+  })
+
+  it('should be to restore a password value object', () => {
+    const input = {
+      value: "Password*1"
+    }
+    const password = PasswordVO.create(input)
+    const password_restored = PasswordVO.restore(password!.value)
+    expect(password.value).toBe(password_restored.value)
   })
 
   it('should return an error if not value is provided ', () => {
