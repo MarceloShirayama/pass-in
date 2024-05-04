@@ -1,6 +1,6 @@
-import { Event, CreateEventIn } from "@domain/entities";
+import { ConflictError } from "@/shared/error";
+import { CreateEventIn, Event } from "@domain/entities";
 import { EventRepository } from "../repositories";
-import { ConflictError, InvalidParamError } from "@/shared/error";
 
 type RegisterEventIn = CreateEventIn
 
