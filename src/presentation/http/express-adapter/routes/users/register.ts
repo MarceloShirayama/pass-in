@@ -3,11 +3,11 @@ import { Router } from "express";
 import { RegisterUserUseCase } from "@application/use-cases";
 import { inMemoryUserRepository } from "@infra/repositories";
 
-export const usersRouter = Router();
+export const register = Router();
 
 const userRepository = inMemoryUserRepository;
 
-usersRouter.post("/register", async (req, res, next) => {
+register.post("/register", async (req, res, next) => {
   try {
     const registerUser = new RegisterUserUseCase(userRepository);
     await registerUser.execute(req.body);
