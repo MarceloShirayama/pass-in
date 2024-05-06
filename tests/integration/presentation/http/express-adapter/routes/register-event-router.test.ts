@@ -1,13 +1,22 @@
 import request from 'supertest';
 
 import { ExpressAdapter } from "@/presentation/http/express-adapter";
-import { inMemoryEventRepository } from "@infra/repositories";
 import { InternalServerError } from '@/shared/error';
+import { inMemoryEventRepository, inMemoryUserRepository } from "@infra/repositories";
 
-describe('EventsRouter', () => {
+describe('EventsRouter', async () => {
   const eventRepository = inMemoryEventRepository;
+  const userRepository = inMemoryUserRepository;
   const server = new ExpressAdapter();
   const app = server.application;
+  const responseLogin = await request(app)
+    .post('/users/login')
+    .send({
+      username: 'organizer',
+      password: "Organizer*1"
+    })
+
+  const accessTokenOrganizer = responseLogin.body.accessToken
 
   beforeEach(async () => {
     await eventRepository.clear();
@@ -19,16 +28,60 @@ describe('EventsRouter', () => {
       details: 'any details',
       maximumAttendees: 10
     }
+    const responseRegisterEvent = await request(app)
+      .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
+      .send(input)
+
+    expect(responseRegisterEvent.status).toBe(201)
+    expect(responseRegisterEvent.body).toHaveProperty('id')
+    expect(responseRegisterEvent.body).toHaveProperty('title', input.title)
+    expect(responseRegisterEvent.body).toHaveProperty('slug')
+  })
+
+  it('return an error if token is not provided', async () => {
+    const input = {
+      title: 'any title',
+      details: 'any details',
+      maximumAttendees: 10
+    }
     const response = await request(app)
       .post('/events/register')
       .send(input)
-    expect(response.status).toBe(201)
-    expect(response.body).toHaveProperty('id')
-    expect(response.body).toHaveProperty('title', input.title)
-    expect(response.body).toHaveProperty('slug')
-    expect(response.body).toHaveProperty('details', input.details)
-    expect(response.body).toHaveProperty('maximumAttendees')
-    expect(response.body).toHaveProperty('createdAt')
+    expect(response.status).toBe(401)
+    expect(response.body).toEqual({
+      error: {
+        name: 'UnauthorizedError',
+        message: 'No token provided'
+      }
+    })
+  })
+
+  it('should return an error if user is not an organizer', async () => {
+    const input = {
+      title: 'any title',
+      details: 'any details',
+      maximumAttendees: 10
+    }
+    const responseLogin = await request(app)
+      .post('/users/login')
+      .send({
+        username: 'attendee',
+        password: "Attendee*1"
+      })
+    const accessToken = responseLogin.body.accessToken
+    const response = await request(app)
+      .post('/events/register')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(input)
+
+    expect(response.status).toBe(403)
+    expect(response.body).toEqual({
+      error: {
+        name: 'ForbiddenError',
+        message: 'Access denied'
+      }
+    })
   })
 
   it('should be register an event with valid input without details and maximumAttendees', async () => {
@@ -37,6 +90,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(201)
     expect(response.body).toHaveProperty('id')
@@ -52,9 +106,11 @@ describe('EventsRouter', () => {
     }
     await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(409)
     expect(response.body).toEqual({
@@ -75,6 +131,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -93,6 +150,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -111,6 +169,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -129,6 +188,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -147,6 +207,7 @@ describe('EventsRouter', () => {
     }
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
 
     expect(response.status).toBe(400)
@@ -169,6 +230,7 @@ describe('EventsRouter', () => {
     })
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(500)
     expect(response.body).toEqual({
@@ -190,6 +252,7 @@ describe('EventsRouter', () => {
     })
     const response = await request(app)
       .post('/events/register')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send(input)
     expect(response.status).toBe(500)
     expect(response.body).toEqual({

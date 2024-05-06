@@ -2,8 +2,22 @@ import { UserRepository } from "@/application/repositories";
 import { User } from "@/domain/entities";
 import { InvalidParamError } from "@/shared/error";
 
+const organizer = User.create({
+  name: "Organizer",
+  username: "organizer",
+  password: "Organizer*1",
+})
+
+const attendee = User.create({
+  name: "Attendee",
+  username: "attendee",
+  password: "Attendee*1",
+})
+
+organizer.role = "ORGANIZER"
+
 class InMemoryUserRepository implements UserRepository {
-  #users: User[] = []
+  #users: User[] = [organizer, attendee]
 
   async save(user: User): Promise<void> {
     this.#users.push(user)

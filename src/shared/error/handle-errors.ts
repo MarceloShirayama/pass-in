@@ -4,7 +4,9 @@ import {
   InternalServerError,
   InvalidParamError,
   NotFoundError,
-  UnexpectedError
+  UnexpectedError,
+  UnauthorizedError,
+  ForbiddenError
 } from ".";
 import { logMessage } from "@shared/utils";
 
@@ -12,8 +14,10 @@ export function handleErrors(error: CustomError) {
   let errorResponse;
   switch (error.constructor) {
     case NotFoundError:
+    case UnauthorizedError:
     case InvalidParamError:
     case ConflictError:
+    case ForbiddenError:
       errorResponse = {
         name: error.name,
         message: error.message,
