@@ -1,8 +1,8 @@
 import { RegisterUserAttendeeUseCase } from "@/application/use-cases";
 import { inMemoryUserRepository } from "@/infra/repositories";
-import { ConflictError, InvalidParamError } from "@/shared/error";
+import { ConflictError } from "@/shared/error";
 
-describe('RegisterUserUseCase', () => {
+describe('RegisterUserAttendeeUseCase', () => {
   const userRepo = inMemoryUserRepository
   const useCase = new RegisterUserAttendeeUseCase(userRepo);
 
@@ -10,7 +10,7 @@ describe('RegisterUserUseCase', () => {
     await userRepo.clear();
   });
 
-  it('should be able to register an user with valid input', async () => {
+  it('should be able to register an user attendee with valid input', async () => {
     const input = {
       name: 'any name',
       username: 'any username',
