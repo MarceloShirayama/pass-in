@@ -1,4 +1,4 @@
-import { ViewAttendeesUseCase } from "@application/use-cases/view-attendees-use-case";
+import { ViewAttendeesUseCase } from "@application/use-cases";
 import { inMemoryUserRepository } from "@infra/repositories";
 
 describe('ViewAttendeesUseCase', () => {
