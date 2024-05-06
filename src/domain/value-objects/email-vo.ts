@@ -9,6 +9,9 @@ export class EmailVO {
   }
 
   static create(email: unknown) {
+    if (!email) {
+      throw new InvalidParamError("email is required")
+    }
     if (typeof email !== "string" || !EmailValidator.isValid(email)) {
       throw new InvalidParamError("invalid email")
     }
