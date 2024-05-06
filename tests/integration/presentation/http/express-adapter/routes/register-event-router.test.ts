@@ -2,11 +2,10 @@ import request from 'supertest';
 
 import { ExpressAdapter } from "@/presentation/http/express-adapter";
 import { InternalServerError } from '@/shared/error';
-import { inMemoryEventRepository, inMemoryUserRepository } from "@infra/repositories";
+import { inMemoryEventRepository } from "@infra/repositories";
 
 describe('EventsRouter', async () => {
   const eventRepository = inMemoryEventRepository;
-  const userRepository = inMemoryUserRepository;
   const server = new ExpressAdapter();
   const app = server.application;
   const responseLogin = await request(app)

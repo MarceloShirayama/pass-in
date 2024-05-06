@@ -8,6 +8,13 @@ describe('ViewEventRouter', async () => {
   const eventRepository = inMemoryEventRepository;
   const server = new ExpressAdapter();
   const app = server.application;
+  const responseLogin = await request(app)
+    .post('/users/login')
+    .send({
+      username: 'organizer',
+      password: "Organizer*1"
+    })
+  const accessTokenOrganizer = responseLogin.body.accessToken
 
   beforeEach(async () => {
     await eventRepository.clear();
@@ -23,6 +30,7 @@ describe('ViewEventRouter', async () => {
     await eventRepository.save(event);
     const response = await request(app)
       .get(`/events/${event.props.id}/search`)
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send()
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('id', event.props.id)
@@ -43,6 +51,7 @@ describe('ViewEventRouter', async () => {
     await eventRepository.save(event);
     const response = await request(app)
       .get(`/events/search?title=${event.props.title.value}`)
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send()
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('id', event.props.id)
@@ -56,6 +65,7 @@ describe('ViewEventRouter', async () => {
   it('should return an error if search for event id an unregistered event', async () => {
     const response = await request(app)
       .get('/events/any-id/search')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send()
     expect(response.status).toBe(404)
     expect(response.body).toEqual({
@@ -69,6 +79,7 @@ describe('ViewEventRouter', async () => {
   it('should return an error if search for event title an unregistered event', async () => {
     const response = await request(app)
       .get('/events/search?title=any-title')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send()
 
     expect(response.status).toBe(404)
@@ -83,12 +94,34 @@ describe('ViewEventRouter', async () => {
   it('should return an error if search for event title and title is not provided', async () => {
     const response = await request(app)
       .get('/events/search?title=')
+      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
       .send()
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
       error: {
         name: 'InvalidParamError',
         message: 'title is required'
+      }
+    })
+  })
+
+  it('should return an error if user is not authorized', async () => {
+    const responseLogin = await request(app)
+      .post('/users/login')
+      .send({
+        username: 'attendee',
+        password: "Attendee*1"
+      })
+    const accessToken = responseLogin.body.accessToken
+    const response = await request(app)
+      .get('/events/any-id/search')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+    expect(response.status).toBe(403)
+    expect(response.body).toEqual({
+      error: {
+        name: 'ForbiddenError',
+        message: 'Access denied'
       }
     })
   })

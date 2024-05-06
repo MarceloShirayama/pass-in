@@ -1,8 +1,7 @@
 import request from "supertest";
 
-import { ExpressAdapter } from "@presentation/http/express-adapter";
 import { inMemoryUserRepository } from "@infra/repositories";
-import { InternalServerError } from "@shared/error";
+import { ExpressAdapter } from "@presentation/http/express-adapter";
 
 describe('UsersRouter', () => {
   const userRepository = inMemoryUserRepository;
