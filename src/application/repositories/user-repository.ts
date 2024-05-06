@@ -6,4 +6,5 @@ export type UserRepository = {
   findById(id: unknown): Promise<User | null>
   changeRole(id: string, role: Role): Promise<void>
   getAll(): Promise<User[]>
+  getAllByRole(role: Role): Promise<User[]>
 }

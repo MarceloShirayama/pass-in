@@ -4,12 +4,14 @@ import { InvalidParamError } from "@/shared/error";
 
 const organizer = User.create({
   name: "Organizer",
+  email: "C9h6H@example.com",
   username: "organizer",
   password: "Organizer*1",
 })
 
 const attendee = User.create({
   name: "Attendee",
+  email: "C9h6H@example.com",
   username: "attendee",
   password: "Attendee*1",
 })
@@ -51,6 +53,10 @@ class InMemoryUserRepository implements UserRepository {
 
   async getAll(): Promise<User[]> {
     return this.#users
+  }
+
+  async getAllByRole(role: "ORGANIZER" | "ATTENDEE"): Promise<User[]> {
+    return this.#users.filter(user => user.props.role === role)
   }
 }
 
