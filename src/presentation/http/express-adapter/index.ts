@@ -4,7 +4,7 @@ import {
   handleErrorsMiddleware, routeNotFoundMiddleware
 } from "@presentation/http/express-adapter/middlewares";
 import {
-  eventsRouter, usersRouter
+  attendeesRouter, eventsRouter, usersRouter
 } from "@presentation/http/express-adapter/routes";
 import { HttpServer } from "../http-server";
 
@@ -32,7 +32,7 @@ export class ExpressAdapter implements HttpServer {
     this.#application.use('/events', eventsRouter.register)
     this.#application.use('/events', eventsRouter.getById);
     this.#application.use('/events', eventsRouter.getByTitle)
-    this.#application.use('/users', usersRouter.register)
+    this.#application.use('/attendees', attendeesRouter.register)
     this.#application.use('/users', usersRouter.login)
   }
 

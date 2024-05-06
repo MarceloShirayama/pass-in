@@ -20,7 +20,7 @@ describe('UsersRouter', () => {
       password: 'anyPassword*1'
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(201)
     expect(response.body).toEqual({ message: 'user created' })
@@ -35,7 +35,7 @@ describe('UsersRouter', () => {
       password: 'anyPassword*1'
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -54,7 +54,7 @@ describe('UsersRouter', () => {
       password: 'anyPassword*1'
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -73,7 +73,7 @@ describe('UsersRouter', () => {
       password: ''
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -92,7 +92,7 @@ describe('UsersRouter', () => {
       password: 'ab*P1'
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
@@ -111,7 +111,7 @@ describe('UsersRouter', () => {
       password: 'anyPassword*1'
     }
     const response = await request(app)
-      .post('/users/register')
+      .post('/attendees/register')
       .send(input)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
