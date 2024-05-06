@@ -15,6 +15,7 @@ describe('UsersRouter', () => {
   it('should be register an user with valid input', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }
@@ -29,6 +30,7 @@ describe('UsersRouter', () => {
   it('should return an error if name is not provided', async () => {
     const input = {
       name: '',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }
@@ -47,6 +49,7 @@ describe('UsersRouter', () => {
   it('should return an error if username is not provided', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: '',
       password: 'anyPassword*1'
     }
@@ -65,6 +68,7 @@ describe('UsersRouter', () => {
   it('should return an error if password is not provided', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: ''
     }
@@ -83,6 +87,7 @@ describe('UsersRouter', () => {
   it('should return an error if password length less than min length', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'ab*P1'
     }
@@ -94,6 +99,25 @@ describe('UsersRouter', () => {
       error: {
         name: 'InvalidParamError',
         message: 'password length must be between 8 and 50 characters'
+      }
+    })
+  })
+
+  it('should return an error if email is not provided', async () => {
+    const input = {
+      name: 'any name',
+      email: '',
+      username: 'any username',
+      password: 'anyPassword*1'
+    }
+    const response = await request(app)
+      .post('/users/register')
+      .send(input)
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: {
+        name: 'InvalidParamError',
+        message: 'email is required'
       }
     })
   })

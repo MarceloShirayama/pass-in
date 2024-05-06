@@ -13,6 +13,7 @@ describe('RegisterUserAttendeeUseCase', () => {
   it('should be able to register an user attendee with valid input', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }
@@ -28,6 +29,7 @@ describe('RegisterUserAttendeeUseCase', () => {
   it('should return an error if username already exists', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }

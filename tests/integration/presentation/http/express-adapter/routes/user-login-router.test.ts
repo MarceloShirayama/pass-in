@@ -16,6 +16,7 @@ describe('UserLoginRouter', () => {
   it('should be able to login an user with user registered', async () => {
     const input = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }

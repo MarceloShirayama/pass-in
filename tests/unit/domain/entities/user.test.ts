@@ -4,6 +4,7 @@ describe('User entity', () => {
   it('should create an user with valid values', () => {
     const input: CreateUserIn = {
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     }
@@ -15,6 +16,7 @@ describe('User entity', () => {
     const user_restored = User.restore({
       id: user.props.id,
       name: user.props.name.value,
+      email: user.props.email.value,
       username: user.props.username.value,
       password: user.props.password.value,
       role: user.props.role,
@@ -26,6 +28,7 @@ describe('User entity', () => {
   it('should be to make a user an organizer', () => {
     const user = User.create({
       name: 'any name',
+      email: 'any_email@mail.com',
       username: 'any username',
       password: 'anyPassword*1'
     })
@@ -36,11 +39,13 @@ describe('User entity', () => {
   it('should return false if users are not equal', () => {
     const user1 = User.create({
       name: 'any name 1',
+      email: 'any_email@mail.com',
       username: 'any username 1',
       password: 'anyPassword*1'
     })
     const user2 = User.create({
       name: 'any name 2',
+      email: 'any_email@mail.com',
       username: 'any username 2',
       password: 'anyPassword*1'
     })
@@ -51,6 +56,7 @@ describe('User entity', () => {
   it('should return an error if any object is not an user', () => {
     const obj1 = User.create({
       name: 'any name 1',
+      email: 'any_email@mail.com',
       username: 'any username 1',
       password: 'anyPassword*1'
     })

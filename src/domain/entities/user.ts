@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { PasswordVO, StringVO } from "../value-objects"
+import { PasswordVO, StringVO, EmailVO } from "@domain/value-objects"
 
 export const Role = {
   "ORGANIZER": "ORGANIZER",
@@ -12,6 +12,7 @@ export type Role = keyof typeof Role
 type UserProps = {
   id: string
   name: StringVO
+  email: EmailVO
   username: StringVO
   password: PasswordVO
   role: Role
@@ -20,6 +21,7 @@ type UserProps = {
 
 export type CreateUserIn = {
   name: unknown
+  email: unknown
   username: unknown
   password: unknown
 }
@@ -27,6 +29,7 @@ export type CreateUserIn = {
 export type RestoreUserIn = {
   id: string
   name: unknown
+  email: unknown
   username: unknown
   password: unknown
   role: Role
@@ -36,6 +39,7 @@ export type RestoreUserIn = {
 export class User {
   #id: string
   #name: StringVO
+  #email: EmailVO
   #username: StringVO
   #password: PasswordVO
   #role: Role
@@ -44,6 +48,7 @@ export class User {
   private constructor(props: UserProps) {
     this.#id = props.id
     this.#name = props.name
+    this.#email = props.email
     this.#username = props.username
     this.#password = props.password
     this.#role = props.role
@@ -54,6 +59,7 @@ export class User {
     return {
       id: this.#id,
       name: this.#name,
+      email: this.#email,
       username: this.#username,
       password: this.#password,
       role: this.#role,
@@ -65,6 +71,7 @@ export class User {
     return new User({
       id: randomUUID(),
       name: StringVO.create({ paramName: 'name', value: input.name }),
+      email: EmailVO.create(input.email),
       username: StringVO.create({ paramName: 'username', value: input.username }),
       password: PasswordVO.create({
         value: input.password,
@@ -80,6 +87,7 @@ export class User {
     return new User({
       id: input.id,
       name: StringVO.create({ paramName: 'name', value: input.name }),
+      email: EmailVO.create(input.email),
       username: StringVO.create({ paramName: 'username', value: input.username }),
       password: PasswordVO.restore(input.password),
       role: input.role,
