@@ -17,8 +17,7 @@ const eventUserRepository = inMemoryEventUserRepository;
 const jwt = new JWTAdapter();
 const registerAttendee = new RegisterAttendeeInEventUseCase(
   eventUserRepository,
-  eventRepository,
-  userRepository
+  eventRepository
 );
 
 registerAttendeeInEvent.post(

@@ -12,8 +12,7 @@ describe('RegisterAttendeeInEventUseCase', async () => {
   const userRepo = inMemoryUserRepository
   const useCase = new RegisterAttendeeInEventUseCase(
     eventUserRepo,
-    eventRepo,
-    userRepo
+    eventRepo
   );
   const userRegistered = await userRepo.findByUsername('attendee')
   const eventRegistered = await eventRepo.findByTitle('Event example')
@@ -51,15 +50,6 @@ describe('RegisterAttendeeInEventUseCase', async () => {
       userId: userRegistered!.props.id
     })).rejects.toThrowError(
       new NotFoundError("event not found")
-    )
-  })
-
-  it('should return an error if user not found', async () => {
-    expect(() => useCase.execute({
-      eventId: eventRegistered!.props.id,
-      userId: 'any id'
-    })).rejects.toThrowError(
-      new NotFoundError("user not found")
     )
   })
 })
