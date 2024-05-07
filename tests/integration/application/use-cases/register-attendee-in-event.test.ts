@@ -1,10 +1,10 @@
 import { RegisterAttendeeInEventUseCase } from "@application/use-cases";
 import {
-  inMemoryEventUserRepository,
   inMemoryEventRepository,
+  inMemoryEventUserRepository,
   inMemoryUserRepository
 } from "@infra/repositories";
-import { ConflictError, InvalidParamError } from "@shared/error";
+import { ConflictError, NotFoundError } from "@shared/error";
 
 describe('RegisterAttendeeInEventUseCase', async () => {
   const eventUserRepo = inMemoryEventUserRepository
@@ -50,7 +50,7 @@ describe('RegisterAttendeeInEventUseCase', async () => {
       eventId: 'any id',
       userId: userRegistered!.props.id
     })).rejects.toThrowError(
-      new InvalidParamError("event not found")
+      new NotFoundError("event not found")
     )
   })
 
@@ -59,7 +59,7 @@ describe('RegisterAttendeeInEventUseCase', async () => {
       eventId: eventRegistered!.props.id,
       userId: 'any id'
     })).rejects.toThrowError(
-      new InvalidParamError("user not found")
+      new NotFoundError("user not found")
     )
   })
 })
