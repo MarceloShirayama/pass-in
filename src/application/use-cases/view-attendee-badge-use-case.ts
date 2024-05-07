@@ -1,14 +1,18 @@
 import { InternalServerError, NotFoundError } from "@shared/error";
 import { UserRepository, EventUserRepository, EventRepository } from "@application/repositories";
 
+type Events = {
+  title: string
+  slug: string
+  details?: string
+}
+
 type ViewAttendeeBadgeOut = {
   badge: {
     name: string
     email: string
     username: string
-    events: {
-      title: string
-    }[]
+    events: Events[]
   }
 }
 
@@ -20,6 +24,7 @@ export class ViewAttendeeBadgeUseCase {
   ) { }
 
   async execute(attendeeId: string): Promise<ViewAttendeeBadgeOut> {
+    let events: Events[] = []
     const attendee = await this.userRepository.findById(attendeeId)
     if (!attendee) throw new NotFoundError('Attendee not found')
 
@@ -28,13 +33,17 @@ export class ViewAttendeeBadgeUseCase {
 
     const eventsId = eventsUser.map(eventUser => eventUser.props.eventId)
 
-    const events = await Promise.all(eventsId.map(async eventId => {
-      const event = await this.eventRepository.findById(eventId)
-      if (!event) throw new InternalServerError(`Event ${eventId} not found`)
-      return {
-        title: event.props.title.value
-      }
-    }))
+    if (eventsId.length > 0) {
+      events = await Promise.all(eventsId.map(async eventId => {
+        const event = await this.eventRepository.findById(eventId)
+        if (!event) throw new InternalServerError(`Event ${eventId} not found`)
+        return {
+          title: event.props.title.value,
+          slug: event.props.slug,
+          details: event.props.details?.value
+        }
+      }))
+    }
 
     return {
       badge: {

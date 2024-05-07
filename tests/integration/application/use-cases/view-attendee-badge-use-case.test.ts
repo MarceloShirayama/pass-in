@@ -5,6 +5,7 @@ import {
   inMemoryEventUserRepository,
   inMemoryUserRepository
 } from "@infra/repositories";
+import { slugifyText } from "@shared/utils";
 
 describe('ViewAttendeeBadgeUseCase', async () => {
   const eventUserRepo = inMemoryEventUserRepository
@@ -55,7 +56,17 @@ describe('ViewAttendeeBadgeUseCase', async () => {
           name: 'any name',
           email: 'any_email@mail.com',
           username: 'any username',
-          events: [{ title: 'Event 1 title' }, { title: 'Event 2 title' }]
+          events: [
+            {
+              title: 'Event 1 title',
+              slug: slugifyText('Event 1 title'),
+              details: 'Event 1 details',
+            }, {
+              title: 'Event 2 title',
+              slug: slugifyText('Event 2 title'),
+              details: 'Event 2 details',
+            }
+          ]
         }
       })
     )
