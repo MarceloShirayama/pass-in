@@ -1,8 +1,14 @@
 import { EventRepository } from "@/application/repositories";
 import { Event } from "@domain/entities";
 
+const eventExample = Event.create({
+  title: "Event example",
+  details: "details of event example",
+  maximumAttendees: 10,
+})
+
 class InMemoryEventRepository implements EventRepository {
-  private events: Event[] = []
+  private events: Event[] = [eventExample]
 
   async save(event: Event): Promise<void> {
     this.events.push(event)
