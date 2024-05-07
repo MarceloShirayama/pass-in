@@ -31,7 +31,7 @@ export function handleErrors(error: CustomError) {
         message: "An internal server error occurred, contact support",
         stack: error.stack
       };
-      logMessage(errorResponse, "ERROR")
+      logMessage({ ...errorResponse, message: error.message }, "ERROR")
       break;
     default:
       const unexpectedError = new UnexpectedError();
@@ -41,7 +41,7 @@ export function handleErrors(error: CustomError) {
         message: unexpectedError.message,
         stack: unexpectedError.stack
       };
-      logMessage(errorResponse, "ERROR")
+      logMessage({ ...errorResponse, message: error.message }, "ERROR")
       break;
   }
   return errorResponse
