@@ -29,20 +29,18 @@ export class ViewAttendeeBadgeUseCase {
     if (!attendee) throw new NotFoundError('Attendee not found')
 
     const eventsUser = await this.eventUserRepository.findAllByUserId(attendeeId)
-    if (eventsUser.length === 0) throw new NotFoundError('Events not found')
 
-    const eventsId = eventsUser.map(eventUser => eventUser.props.eventId)
-
-    if (eventsId.length > 0) {
-      events = await Promise.all(eventsId.map(async eventId => {
+    if (eventsUser.length > 0) {
+      for (const eventUser of eventsUser) {
+        const eventId = eventUser.props.eventId
         const event = await this.eventRepository.findById(eventId)
-        if (!event) throw new InternalServerError(`Event ${eventId} not found`)
-        return {
+        if (!event) throw new InternalServerError(`event id ${eventId} not found`)
+        events.push({
           title: event.props.title.value,
           slug: event.props.slug,
           details: event.props.details?.value
-        }
-      }))
+        })
+      }
     }
 
     return {
