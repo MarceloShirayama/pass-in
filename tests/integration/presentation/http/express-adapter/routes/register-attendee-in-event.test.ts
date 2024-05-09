@@ -2,9 +2,11 @@ import request from "supertest";
 
 import {
   inMemoryEventRepository,
-  inMemoryEventUserRepository
+  inMemoryEventUserRepository,
+  inMemoryUserRepository
 } from "@infra/repositories";
 import { ExpressAdapter } from "@presentation/http/express-adapter";
+import { User } from "@domain/entities";
 
 describe('RegisterAttendeeInEventRouter', async () => {
   const eventRepository = inMemoryEventRepository;
@@ -18,7 +20,7 @@ describe('RegisterAttendeeInEventRouter', async () => {
       username: "attendee",
       password: "Attendee*1"
     })
-  const accessTokenOrganizer = responseLogin.body.accessToken
+  const accessToken = responseLogin.body.accessToken
 
   beforeEach(async () => {
     await eventUserRepository.clear();
@@ -27,7 +29,7 @@ describe('RegisterAttendeeInEventRouter', async () => {
   it('should be able to register an attendee in an event', async () => {
     const response = await request(app)
       .post(`/events/${event!.props.id}/attendees`)
-      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
     expect(response.status).toBe(201)
     expect(response.body).toHaveProperty('eventId')
@@ -37,11 +39,11 @@ describe('RegisterAttendeeInEventRouter', async () => {
   it('should return an error if user already registered in event', async () => {
     await request(app)
       .post(`/events/${event!.props.id}/attendees`)
-      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
     const response = await request(app)
       .post(`/events/${event!.props.id}/attendees`)
-      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
     expect(response.status).toBe(409)
     expect(response.body).toEqual({
@@ -52,10 +54,49 @@ describe('RegisterAttendeeInEventRouter', async () => {
     })
   })
 
+  it(
+    'should return an error if number of attendees in event exceed maximum',
+    async () => {
+      await request(app)
+        .post(`/events/${event!.props.id}/attendees`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send()
+      const attendee2 = User.create({
+        name: 'any name',
+        username: 'any username',
+        email: 'any-email@mail.com',
+        password: 'anyPassword*2'
+      })
+      await inMemoryUserRepository.save(attendee2)
+      const responseLoginAttendee2 = await request(app)
+        .post('/users/login')
+        .send({
+          username: "any username",
+          password: "anyPassword*2"
+        })
+      const accessTokenAttendee2 = responseLoginAttendee2.body.accessToken
+      await request(app)
+        .post(`/events/${event!.props.id}/attendees`)
+        .set('Authorization', `Bearer ${accessTokenAttendee2}`)
+        .send()
+      const response = await request(app)
+        .post(`/events/${event!.props.id}/attendees`)
+        .set('Authorization', `Bearer ${accessTokenAttendee2}`)
+        .send()
+      expect(response.status).toBe(409)
+      expect(response.body).toEqual({
+        error: {
+          name: 'ConflictError',
+          message: 'event is full'
+        }
+      })
+    }
+  )
+
   it('should return an error if event not found', async () => {
     const response = await request(app)
       .post(`/events/any-id/attendees`)
-      .set('Authorization', `Bearer ${accessTokenOrganizer}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
     expect(response.status).toBe(404)
     expect(response.body).toEqual({

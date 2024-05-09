@@ -4,7 +4,7 @@ import { Event } from "@domain/entities";
 const eventExample = Event.create({
   title: "Event example",
   details: "details of event example",
-  maximumAttendees: 10,
+  maximumAttendees: 2
 })
 
 class InMemoryEventRepository implements EventRepository {

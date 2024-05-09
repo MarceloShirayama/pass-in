@@ -1,4 +1,4 @@
-import { NotFoundError } from "@/shared/error";
+import { ConflictError, NotFoundError } from "@shared/error";
 import { EventRepository, EventUserRepository } from "@application/repositories";
 
 type Input = {
@@ -20,6 +20,13 @@ export class RegisterAttendeeInEventUseCase {
   async execute({ eventId, userId }: Input): Promise<Output> {
     const event = await this.eventRepository.findById(eventId)
     if (!event) throw new NotFoundError("event not found")
+    const eventUserWithEventId = await this.eventUserRepository.findAllByEventId(eventId)
+    const numberOfAttendeesRegisteredInEvent = eventUserWithEventId.length
+    const eventIsFull = (
+      event.props.maximumAttendees?.value &&
+      numberOfAttendeesRegisteredInEvent >= event.props.maximumAttendees.value
+    )
+    if (eventIsFull) throw new ConflictError("event is full")
     await this.eventUserRepository.save({ eventId, userId })
     return {
       eventId,
