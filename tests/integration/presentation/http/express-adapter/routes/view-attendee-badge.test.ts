@@ -6,6 +6,7 @@ import {
   inMemoryUserRepository
 } from "@infra/repositories";
 import { ExpressAdapter } from "@presentation/http/express-adapter";
+import { EventUser } from "@domain/entities";
 
 describe('ViewAttendeeBadgeRouter', async () => {
   const eventRepository = inMemoryEventRepository;
@@ -24,7 +25,8 @@ describe('ViewAttendeeBadgeRouter', async () => {
   const eventId = (await eventRepository.findByTitle('Event example'))?.props.id as string
 
   beforeEach(async () => {
-    await eventUserRepository.save({ eventId, userId })
+    const eventUser = EventUser.create({ eventId, userId })
+    await eventUserRepository.save(eventUser)
   })
 
   afterEach(async () => {

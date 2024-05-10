@@ -5,10 +5,8 @@ import { ConflictError } from "@/shared/error";
 class InMemoryEventUserRepository implements EventUserRepository {
   #eventUser: EventUser[] = []
 
-  async save(
-    { eventId, userId }: { eventId: string, userId: string }
-  ): Promise<void> {
-    this.#eventUser.push(EventUser.create({ eventId, userId }))
+  async save(eventUser: EventUser): Promise<void> {
+    this.#eventUser.push(eventUser)
   }
   async findAllByUserId(userId: string): Promise<EventUser[]> {
     const eventUser = this.#eventUser.filter(

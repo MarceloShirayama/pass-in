@@ -1,5 +1,6 @@
 import { ConflictError, NotFoundError } from "@shared/error";
 import { EventRepository, EventUserRepository } from "@application/repositories";
+import { EventUser } from "@/domain/entities";
 
 type Input = {
   eventId: string
@@ -31,7 +32,8 @@ export class RegisterAttendeeInEventUseCase {
     if (alreadyExistsEventUser) {
       throw new ConflictError("attendee is already registered for this event")
     }
-    await this.eventUserRepository.save({ eventId, userId })
+    const eventUser = EventUser.create({ eventId, userId })
+    await this.eventUserRepository.save(eventUser)
     return {
       eventId,
       userId

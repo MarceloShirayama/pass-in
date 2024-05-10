@@ -33,14 +33,10 @@ describe('ViewAttendeeBadgeUseCase', async () => {
   const attendeeId = (await userRepo.findByUsername('any username'))?.props.id
   const event1Id = (await eventRepo.findByTitle('Event 1 title'))?.props.id
   const event2Id = (await eventRepo.findByTitle('Event 2 title'))?.props.id
-  await eventUserRepo.save({
-    userId: attendeeId!,
-    eventId: event1Id!
-  })
-  await eventUserRepo.save({
-    userId: attendeeId!,
-    eventId: event2Id!
-  })
+  const eventUser1 = EventUser.create({ eventId: event1Id!, userId: attendeeId! })
+  await eventUserRepo.save(eventUser1)
+  const eventUser2 = EventUser.create({ eventId: event2Id!, userId: attendeeId! })
+  await eventUserRepo.save(eventUser2)
 
   afterEach(async () => {
     await eventUserRepo.clear();
