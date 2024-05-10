@@ -1,5 +1,3 @@
-import { randomUUID } from "node:crypto";
-
 type EventUserProps = {
   eventId: string
   userId: string
@@ -24,7 +22,6 @@ export class EventUser {
   }
 
   static create(props: CreateEventUser) {
-    const id = randomUUID()
     return new EventUser({
       eventId: props.eventId,
       userId: props.userId,
