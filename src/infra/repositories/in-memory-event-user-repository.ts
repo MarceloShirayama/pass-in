@@ -8,15 +8,6 @@ class InMemoryEventUserRepository implements EventUserRepository {
   async save(
     { eventId, userId }: { eventId: string, userId: string }
   ): Promise<void> {
-    const alreadyExistsEventUser = this.#eventUser.find(
-      eventUser => (
-        eventUser.props.userId === userId &&
-        eventUser.props.eventId === eventId
-      )
-    )
-    if (alreadyExistsEventUser) {
-      throw new ConflictError("attendee is already registered for this event")
-    }
     this.#eventUser.push(EventUser.create({ eventId, userId }))
   }
   async findAllByUserId(userId: string): Promise<EventUser[]> {

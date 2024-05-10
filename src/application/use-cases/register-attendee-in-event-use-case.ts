@@ -27,6 +27,10 @@ export class RegisterAttendeeInEventUseCase {
       numberOfAttendeesRegisteredInEvent >= event.props.maximumAttendees.value
     )
     if (eventIsFull) throw new ConflictError("event is full")
+    const alreadyExistsEventUser = await this.eventUserRepository.findByUserIdAndEventId({ userId, eventId })
+    if (alreadyExistsEventUser) {
+      throw new ConflictError("attendee is already registered for this event")
+    }
     await this.eventUserRepository.save({ eventId, userId })
     return {
       eventId,
