@@ -43,43 +43,55 @@ Nessa aplicação vamos utilizar banco de dados relacional (SQL). Para ambiente 
 
 ```sql
 CREATE TABLE IF NOT EXISTS event(
-    event_id UUID,
-    title VARCHAR(50) NOT NULL,
-    slug VARCHAR(50) NOT NULL,
-    details VARCHAR(255),
-    maximum_attendees INTEGER,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT event_pkey PRIMARY KEY (event_id),
-    CONSTRAINT event_title_key UNIQUE (title),
-    CONSTRAINT event_slug_key UNIQUE (slug)
+  event_id UUID,
+  title VARCHAR(50) NOT NULL,
+  slug VARCHAR(50) NOT NULL,
+  details VARCHAR(255),
+  maximum_users INTEGER,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT event_pkey PRIMARY KEY (event_id),
+  CONSTRAINT event_title_key UNIQUE (title),
+  CONSTRAINT event_slug_key UNIQUE (slug)
 );
-CREATE TABLE IF NOT EXISTS attendee(
-    attendee_id UUID,
-    name VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    event_id UUID NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT attendee_pkey PRIMARY KEY(attendee_id),
-    CONSTRAINT attendee_email_key UNIQUE (email),
-    CONSTRAINT event_id_fkey
-        FOREIGN KEY(event_id) 
-            REFERENCES event(event_id)
+
+CREATE TABLE IF NOT EXISTS "user"(
+  user_id UUID,
+  name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(10) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT user_pkey PRIMARY KEY(user_id),
+  CONSTRAINT user_email_key UNIQUE (email)
 );
+
+CREATE TABLE IF NOT EXISTS event_user(
+  event_id UUID NOT NULL,
+  user_id UUID NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT event_user_pkey PRIMARY KEY(event_id, user_id),
+  CONSTRAINT event_user_event_id_fkey
+    FOREIGN KEY(event_id)
+      REFERENCES event(event_id)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT event_user_user_id_fkey
+    FOREIGN KEY(user_id)
+      REFERENCES "user"(user_id)
+      ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS check_in(
-    check_in_id UUID,
-    attendee_id UUID NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    event_id UUID NOT NULL,
-    CONSTRAINT check_in_pkey PRIMARY KEY(check_in_id),
-    CONSTRAINT attendee_id_fkey
-        FOREIGN KEY(attendee_id) 
-            REFERENCES attendee(attendee_id)
-            ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT event_id_fkey
-        FOREIGN KEY(event_id) 
-            REFERENCES event(event_id)
-            ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT check_in_attendee_id_event_id_unique
-        UNIQUE (attendee_id, event_id)                        
+  event_id UUID NOT NULL,
+  user_id UUID NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT check_in_pkey PRIMARY KEY(event_id, user_id),
+  CONSTRAINT check_in_event_id_fkey
+    FOREIGN KEY(event_id)
+      REFERENCES event(event_id)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT check_in_user_id_fkey
+    FOREIGN KEY(user_id)
+      REFERENCES "user"(user_id)
+      ON DELETE CASCADE ON UPDATE CASCADE
 );
 ```
