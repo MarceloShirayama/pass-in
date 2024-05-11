@@ -36,6 +36,7 @@ export class ExpressAdapter implements HttpServer {
     this.#application.use('/attendees', attendeesRouter.register)
     this.#application.use('/attendees', attendeesRouter.viewAttendees)
     this.#application.use('/attendees', attendeesRouter.viewAttendeeBadge)
+    this.#application.use('/attendees', attendeesRouter.checkIn)
     this.#application.use('/users', usersRouter.login)
   }
 
