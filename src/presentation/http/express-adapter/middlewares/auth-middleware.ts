@@ -12,7 +12,7 @@ export const authMiddleware = (
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization?.replace('Bearer ', '');
-      if (!token) throw new UnauthorizedError("No token provided");
+      if (!token) throw new UnauthorizedError("not logged in");
       const payload = await jwt.verify(token);
       if (!payload) throw new UnauthorizedError("Not authorized");
       const userId = payload.id;

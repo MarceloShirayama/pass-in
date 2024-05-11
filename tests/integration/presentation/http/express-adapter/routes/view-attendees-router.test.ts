@@ -51,7 +51,7 @@ describe('ViewAttendeesRouter', async () => {
       .send()
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
-      error: { name: 'UnauthorizedError', message: 'No token provided' }
+      error: { name: 'UnauthorizedError', message: 'not logged in' }
     });
   })
 })

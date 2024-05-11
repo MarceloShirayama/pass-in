@@ -51,7 +51,7 @@ describe('EventsRouter', async () => {
     expect(response.body).toEqual({
       error: {
         name: 'UnauthorizedError',
-        message: 'No token provided'
+        message: 'not logged in'
       }
     })
   })
