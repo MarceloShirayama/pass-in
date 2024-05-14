@@ -1,6 +1,6 @@
-import { RegisterUserAttendeeUseCase } from "@/application/use-cases";
-import { inMemoryUserRepository } from "@/infra/repositories";
-import { ConflictError } from "@/shared/error";
+import { RegisterUserAttendeeUseCase } from "@application/use-cases";
+import { inMemoryUserRepository } from "@infra/repositories";
+import { ConflictError } from "@shared/error";
 
 describe('RegisterUserAttendeeUseCase', () => {
   const userRepo = inMemoryUserRepository
