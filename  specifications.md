@@ -42,56 +42,58 @@ Nessa aplicação vamos utilizar banco de dados relacional (SQL). Para ambiente 
 ### Estrutura do banco (SQL)
 
 ```sql
-CREATE TABLE IF NOT EXISTS event(
+CREATE TABLE IF NOT EXISTS tb_event (
   event_id UUID,
   title VARCHAR(50) NOT NULL,
   slug VARCHAR(50) NOT NULL,
   details VARCHAR(255),
   maximum_users INTEGER,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT event_pkey PRIMARY KEY (event_id),
-  CONSTRAINT event_title_key UNIQUE (title),
-  CONSTRAINT event_slug_key UNIQUE (slug)
+  CONSTRAINT tb_event_pkey PRIMARY KEY (event_id),
+  CONSTRAINT tb_event_title_key UNIQUE (title),
+  CONSTRAINT tb_event_slug_key UNIQUE (slug)
 );
 
-CREATE TABLE IF NOT EXISTS "user"(
+CREATE TABLE IF NOT EXISTS tb_user (
   user_id UUID,
   name VARCHAR(50) NOT NULL,
+  username VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role VARCHAR(10) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT user_pkey PRIMARY KEY(user_id),
-  CONSTRAINT user_email_key UNIQUE (email)
+  CONSTRAINT tb_user_pkey PRIMARY KEY(user_id),
+  CONSTRAINT tb_user_email_key UNIQUE (email),
+  CONSTRAINT tb_user_username_key UNIQUE (username)
 );
 
-CREATE TABLE IF NOT EXISTS event_user(
+CREATE TABLE IF NOT EXISTS tb_event_user(
   event_id UUID NOT NULL,
   user_id UUID NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT event_user_pkey PRIMARY KEY(event_id, user_id),
-  CONSTRAINT event_user_event_id_fkey
+  CONSTRAINT tb_event_user_pkey PRIMARY KEY(event_id, user_id),
+  CONSTRAINT tb_event_user_event_id_fkey
     FOREIGN KEY(event_id)
-      REFERENCES event(event_id)
+      REFERENCES tb_event(event_id)
       ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT event_user_user_id_fkey
+  CONSTRAINT tb_event_user_user_id_fkey
     FOREIGN KEY(user_id)
-      REFERENCES "user"(user_id)
+      REFERENCES tb_user(user_id)
       ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS check_in(
+CREATE TABLE IF NOT EXISTS tb_check_in(
   event_id UUID NOT NULL,
   user_id UUID NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT check_in_pkey PRIMARY KEY(event_id, user_id),
-  CONSTRAINT check_in_event_id_fkey
+  CONSTRAINT tb_check_in_pkey PRIMARY KEY(event_id, user_id),
+  CONSTRAINT tb_check_in_event_id_fkey
     FOREIGN KEY(event_id)
-      REFERENCES event(event_id)
+      REFERENCES tb_event(event_id)
       ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT check_in_user_id_fkey
+  CONSTRAINT tb_check_in_user_id_fkey
     FOREIGN KEY(user_id)
-      REFERENCES "user"(user_id)
+      REFERENCES tb_user(user_id)
       ON DELETE CASCADE ON UPDATE CASCADE
 );
 ```

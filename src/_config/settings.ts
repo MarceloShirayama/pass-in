@@ -16,3 +16,11 @@ export const JWT_CONFIG = {
   SECRET_KEY: process.env.JWT_SECRET,
   EXPIRES_IN: process.env.JWT_EXPIRES_IN
 }
+
+export const DB = {
+  USER: process.env.POSTGRES_USER,
+  PASS: process.env.POSTGRES_PASSWORD,
+  HOST: process.env.POSTGRES_HOST,
+  PORT: Number(process.env.POSTGRES_PORT),
+  DB_NAME: process.env.POSTGRES_DATABASE
+}
