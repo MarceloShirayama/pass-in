@@ -1,4 +1,5 @@
 import {
+  EventDatabaseRepository,
   inMemoryCheckInRepository,
   inMemoryEventRepository,
   inMemoryEventUserRepository,
@@ -26,9 +27,10 @@ export class RepositoriesFactory {
   static get database() {
     const connection = new PostgresAdapter()
     const userRepository = new UserDatabaseRepository(connection)
+    const eventRepository = new EventDatabaseRepository(connection)
     return {
       userRepository,
-      eventRepository: {} as EventRepository,
+      eventRepository,
       eventUserRepository: {} as EventUserRepository,
       checkInRepository: {} as CheckInRepository
     }
