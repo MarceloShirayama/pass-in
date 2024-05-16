@@ -19,6 +19,15 @@ const initOptions: pgp.IInitOptions = {
     if (process.env.NODE_ENV !== "test") return
     logMessage(`Query: ${e.query}`, "INFO");
   },
+  error(err, e) {
+    logMessage({
+      errorCode: err.code,
+      errorMessage: err.message,
+      query: e.query,
+      params: e.params,
+      stack: err.stack
+    }, "ERROR");
+  },
   schema: "public"
 }
 
@@ -41,11 +50,13 @@ export class PostgresAdapter implements Connection {
       const result = await db.query(query, params)
       return result
     } catch (error: any) {
-      if (error.code === "ECONNREFUSED") {
-        logMessage("Database connection refused", "ERROR")
-        throw new InternalServerError("Internal server error, contact support")
+      switch (error.code) {
+        case "ECONNREFUSED":
+        case "42703":
+          throw new InternalServerError("Internal server error, contact support")
+        default:
+          throw new UnexpectedError();
       }
-      throw new UnexpectedError()
     }
   }
 }
