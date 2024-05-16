@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS tb_event (
   title VARCHAR(50) NOT NULL,
   slug VARCHAR(50) NOT NULL,
   details VARCHAR(255),
-  maximum_users INTEGER,
+  maximum_attendees INTEGER,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   CONSTRAINT tb_event_pkey PRIMARY KEY (event_id),
   CONSTRAINT tb_event_title_key UNIQUE (title),
