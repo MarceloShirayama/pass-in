@@ -1,9 +1,11 @@
 import request from "supertest";
 
 import { ExpressAdapter } from "@presentation/http/express-adapter"
+import { RepositoriesFactory } from "@infra/factories";
 
 describe('ViewAttendeesRouter', async () => {
-  const server = new ExpressAdapter();
+  const repositories = RepositoriesFactory.inMemory
+  const server = new ExpressAdapter(repositories);
   const app = server.application;
 
   it('should be able to view attendees list', async () => {

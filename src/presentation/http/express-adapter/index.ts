@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 
+import { Repositories } from "@infra/factories";
 import {
   handleErrorsMiddleware, routeNotFoundMiddleware
 } from "@presentation/http/express-adapter/middlewares";
@@ -11,11 +12,13 @@ import { HttpServer } from "../http-server";
 export class ExpressAdapter implements HttpServer {
   #application: Express
 
-  constructor() {
+  constructor(
+    private readonly repositories: Repositories
+  ) {
     this.#application = express()
     this.#setupServerHeaders()
     this.#setupRoutes()
-    this.#setupErrorHandlingMiddleware()
+    this.#setupErrorHandler()
   }
 
   #setupServerHeaders() {
@@ -23,23 +26,31 @@ export class ExpressAdapter implements HttpServer {
     this.#application.disable('x-powered-by')
   }
 
-  #setupErrorHandlingMiddleware() {
+  #setupErrorHandler() {
     routeNotFoundMiddleware(this.#application)
     handleErrorsMiddleware(this.#application)
   }
 
   #setupRoutes() {
-    this.#application.use('/events', eventsRouter.register)
-    this.#application.use('/events', eventsRouter.getById);
-    this.#application.use('/events', eventsRouter.getByTitle)
-    this.#application.use('/events', eventsRouter.registerAttendeeInEvent)
-    this.#application.use('/attendees', attendeesRouter.register)
-    this.#application.use('/attendees', attendeesRouter.viewAttendees)
-    this.#application.use('/attendees', attendeesRouter.viewAttendeeBadge)
-    this.#application.use('/attendees', attendeesRouter.checkIn)
-    this.#application.use('/users', usersRouter.login)
+    for (const route in eventsRouter) {
+      this.#application.use(
+        '/events',
+        eventsRouter[route as keyof typeof eventsRouter](this.repositories)
+      )
+    }
+    for (const route in attendeesRouter) {
+      this.#application.use(
+        '/attendees',
+        attendeesRouter[route as keyof typeof attendeesRouter](this.repositories)
+      )
+    }
+    for (const route in usersRouter) {
+      this.#application.use(
+        '/users',
+        usersRouter[route as keyof typeof usersRouter](this.repositories)
+      )
+    }
   }
-
 
   listen(port: number, callback: () => void): void {
     this.#application.listen(port, callback)

@@ -1,11 +1,12 @@
 import request from "supertest";
 
-import { inMemoryUserRepository } from "@infra/repositories";
+import { RepositoriesFactory } from "@infra/factories";
 import { ExpressAdapter } from "@presentation/http/express-adapter";
 
 describe('UsersRouter', () => {
-  const userRepository = inMemoryUserRepository;
-  const server = new ExpressAdapter();
+  const repositories = RepositoriesFactory.inMemory
+  const userRepository = repositories.userRepository
+  const server = new ExpressAdapter(repositories);
   const app = server.application;
 
   beforeEach(async () => {

@@ -1,17 +1,18 @@
 import request from "supertest";
 
+import { User } from "@domain/entities";
 import {
-  inMemoryEventRepository,
-  inMemoryEventUserRepository,
   inMemoryUserRepository
 } from "@infra/repositories";
+import { RepositoriesFactory } from "@infra/factories";
 import { ExpressAdapter } from "@presentation/http/express-adapter";
-import { User } from "@domain/entities";
 
 describe('RegisterAttendeeInEventRouter', async () => {
-  const eventRepository = inMemoryEventRepository;
-  const eventUserRepository = inMemoryEventUserRepository;
-  const server = new ExpressAdapter();
+  const repositories = RepositoriesFactory.inMemory
+  const {
+    eventRepository, eventUserRepository
+  } = repositories
+  const server = new ExpressAdapter(repositories);
   const app = server.application;
   const event = await eventRepository.findByTitle('Event example')
   const responseLogin = await request(app)

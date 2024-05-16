@@ -1,18 +1,17 @@
 import request from "supertest";
 
-import {
-  inMemoryEventRepository,
-  inMemoryEventUserRepository,
-  inMemoryUserRepository
-} from "@infra/repositories";
-import { ExpressAdapter } from "@presentation/http/express-adapter";
 import { EventUser } from "@domain/entities";
+import { RepositoriesFactory } from "@infra/factories";
+import { ExpressAdapter } from "@presentation/http/express-adapter";
 
 describe('ViewAttendeeBadgeRouter', async () => {
-  const eventRepository = inMemoryEventRepository;
-  const eventUserRepository = inMemoryEventUserRepository;
-  const userRepository = inMemoryUserRepository;
-  const server = new ExpressAdapter();
+  const repositories = RepositoriesFactory.inMemory
+  const {
+    userRepository,
+    eventRepository,
+    eventUserRepository
+  } = repositories
+  const server = new ExpressAdapter(repositories);
   const app = server.application;
   const responseLogin = await request(app)
     .post('/users/login')

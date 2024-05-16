@@ -1,29 +1,30 @@
 import { Router } from "express";
 
 import { RegisterEventUseCase } from "@/application/use-cases";
-import { inMemoryEventRepository, inMemoryUserRepository } from "@/infra/repositories";
 import { JWTAdapter } from "@/shared/utils";
+import { Repositories } from "@infra/factories";
 import { authMiddleware } from "@presentation/http/express-adapter/middlewares";
 
-export const register = Router();
+export function register(repositories: Repositories) {
+  const router = Router();
+  const { eventRepository, userRepository } = repositories
+  const jwt = new JWTAdapter();
 
-const eventRepository = inMemoryEventRepository;
-const userRepository = inMemoryUserRepository;
-const jwt = new JWTAdapter();
-
-register.post(
-  "/register",
-  authMiddleware({
-    jwt,
-    userRepository,
-    allowedRoles: ["ORGANIZER"]
-  }),
-  async (req, res, next) => {
-    try {
-      const registerEvent = new RegisterEventUseCase(eventRepository);
-      const output = await registerEvent.execute(req.body);
-      res.status(201).send(output);
-    } catch (error) {
-      next(error)
-    }
-  });
+  router.post(
+    "/register",
+    authMiddleware({
+      jwt,
+      userRepository,
+      allowedRoles: ["ORGANIZER"]
+    }),
+    async (req, res, next) => {
+      try {
+        const registerEvent = new RegisterEventUseCase(eventRepository);
+        const output = await registerEvent.execute(req.body);
+        res.status(201).send(output);
+      } catch (error) {
+        next(error)
+      }
+    });
+  return router
+}

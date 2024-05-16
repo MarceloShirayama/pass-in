@@ -1,13 +1,13 @@
 import { RegisterUserAttendeeUseCase } from "@application/use-cases";
-import { UserDatabaseRepository, } from "@infra/repositories";
-import { Connection, PostgresAdapter } from "@infra/database";
-import { ConflictError } from "@/shared/error";
-import { UserRepository } from "@/application/repositories";
+import { PostgresAdapter } from "@infra/database";
+import { RepositoriesFactory } from "@infra/factories";
+import { ConflictError } from "@shared/error";
 
 describe('RegisterUserAttendeeUseCase', () => {
   const sut = () => {
+    const repositories = RepositoriesFactory.database
     const connection = new PostgresAdapter()
-    const userRepo: UserRepository = new UserDatabaseRepository(connection)
+    const userRepo = repositories.userRepository
     const useCase = new RegisterUserAttendeeUseCase(userRepo);
     return { useCase, userRepo, connection }
   }
