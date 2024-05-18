@@ -6,10 +6,10 @@ base_url="http://localhost:3333"
 route="/attendees/register"
 
 # Defina os valores dos campos no corpo da requisição
-name="any name"
-email="any_email@mail.com"
-username="any-username"
-password="anyPassword*1"
+name="Organizer"
+email="organizer@mail.com"
+username="organizer"
+password="OrganizerPassword*1"
 
 # Converta as variáveis em um formato JSON válido
 data=$(\
