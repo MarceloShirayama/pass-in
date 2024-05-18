@@ -3,7 +3,7 @@ import { RegisterEventUseCase } from "@application/use-cases";
 import { RepositoriesFactory } from "@infra/factories";
 import { PostgresAdapter } from "@infra/database";
 
-describe('RegisterEventUseCase', () => {
+describe('RegisterEventUseCase with database repository', () => {
   const sut = () => {
     const repositories = RepositoriesFactory.database;
     const connection = new PostgresAdapter();

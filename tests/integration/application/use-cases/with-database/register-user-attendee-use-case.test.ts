@@ -3,7 +3,7 @@ import { PostgresAdapter } from "@infra/database";
 import { RepositoriesFactory } from "@infra/factories";
 import { ConflictError } from "@shared/error";
 
-describe('RegisterUserAttendeeUseCase', () => {
+describe('RegisterUserAttendeeUseCase with database repository', () => {
   const sut = () => {
     const repositories = RepositoriesFactory.database
     const connection = new PostgresAdapter()
