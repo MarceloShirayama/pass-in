@@ -20,7 +20,9 @@ export function register(repositories: Repositories) {
     async (req, res, next) => {
       try {
         const registerEvent = new RegisterEventUseCase(eventRepository);
-        const output = await registerEvent.execute(req.body);
+        const input = req.body;
+        input.maximumAttendees && !isNaN(parseInt(input.maximumAttendees)) && (input.maximumAttendees = Number(input.maximumAttendees))
+        const output = await registerEvent.execute(input);
         res.status(201).send(output);
       } catch (error) {
         next(error)
