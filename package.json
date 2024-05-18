@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig-build.json",
-    "start": "npm run build && node dist/src/index.js",
+    "start": "node dist/src/index.js",
     "dev": "tsx watch src/index.ts",
     "type:check": "tsc --project tsconfig.json --pretty --noEmit",
     "test": "rimraf logs && vitest run --passWithNoTests",
