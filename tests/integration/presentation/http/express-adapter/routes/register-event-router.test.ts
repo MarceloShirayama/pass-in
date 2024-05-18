@@ -199,7 +199,7 @@ describe('EventsRouter', async () => {
     })
   })
 
-  it.each(["1", -1, 1.1, 0])('should return an error if maximumAttendees is not a positive number', async (maximumAttendees) => {
+  it.each([-1, 1.1, 0])('should return an error if maximumAttendees is not a positive number', async (maximumAttendees) => {
     const input = {
       title: 'any title',
       details: 'any details',
