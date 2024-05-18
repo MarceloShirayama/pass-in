@@ -6,13 +6,23 @@ export class Encrypt {
   static readonly keylen: number = 32;
 
   static hash(password: string): string {
-    const hash = crypto.pbkdf2Sync(password, Encrypt.salt, Encrypt.iterations, Encrypt.keylen, 'sha512').toString('hex');
+    const hash = crypto.pbkdf2Sync(
+      password,
+      Encrypt.salt,
+      Encrypt.iterations,
+      Encrypt.keylen, 'sha512'
+    ).toString('hex');
     return `${Encrypt.salt}.${hash}`;
   }
 
   static compare(password: string, storedHash: string): boolean {
-    const [_, hash] = storedHash.split('.');
-    const hashToCheck = crypto.pbkdf2Sync(password, Encrypt.salt, Encrypt.iterations, Encrypt.keylen, 'sha512').toString('hex');
+    const [salt, hash] = storedHash.split('.');
+    const hashToCheck = crypto.pbkdf2Sync(
+      password,
+      salt,
+      Encrypt.iterations,
+      Encrypt.keylen, 'sha512'
+    ).toString('hex');
     return hash === hashToCheck;
   }
 }
