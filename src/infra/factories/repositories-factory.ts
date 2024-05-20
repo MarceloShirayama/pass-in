@@ -1,4 +1,5 @@
 import {
+  CheckInDatabaseRepository,
   EventDatabaseRepository,
   EventUserDatabaseRepository,
   inMemoryCheckInRepository,
@@ -30,11 +31,12 @@ export class RepositoriesFactory {
     const userRepository = new UserDatabaseRepository(connection)
     const eventRepository = new EventDatabaseRepository(connection)
     const eventUserRepository = new EventUserDatabaseRepository(connection)
+    const checkInRepository = new CheckInDatabaseRepository(connection)
     return {
       userRepository,
       eventRepository,
       eventUserRepository,
-      checkInRepository: {} as CheckInRepository
+      checkInRepository: checkInRepository
     }
   }
 }
