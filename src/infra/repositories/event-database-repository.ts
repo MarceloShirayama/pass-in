@@ -41,7 +41,6 @@ export class EventDatabaseRepository implements EventRepository {
       `,
       [id]
     )
-
     if (!userData) {
       return null
     }
