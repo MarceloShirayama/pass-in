@@ -6,7 +6,7 @@ import {
 import { Router } from "express";
 import { authMiddleware } from "../../middlewares";
 import { JWTAdapter } from "@shared/utils";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 
 export function getById(repositories: Repositories) {
   const { eventRepository, userRepository } = repositories;

@@ -40,10 +40,3 @@ export class RepositoriesFactory {
     }
   }
 }
-
-export type Repositories = {
-  eventRepository: EventRepository
-  eventUserRepository: EventUserRepository
-  userRepository: UserRepository
-  checkInRepository: CheckInRepository
-}

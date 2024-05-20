@@ -1,4 +1,19 @@
-export * from './event-repository'
-export * from './event-user-repository'
-export * from './user-repository'
-export * from './check-in-repository'
+import { CheckInRepository } from "./check-in-repository"
+import { EventRepository } from "./event-repository"
+import { EventUserRepository } from "./event-user-repository"
+import { UserRepository } from "./user-repository"
+
+type Repositories = {
+  eventRepository: EventRepository
+  eventUserRepository: EventUserRepository
+  userRepository: UserRepository
+  checkInRepository: CheckInRepository
+}
+
+export {
+  EventRepository,
+  EventUserRepository,
+  UserRepository,
+  CheckInRepository,
+  Repositories
+}

@@ -4,7 +4,7 @@ import { CheckInRepository, EventUserRepository, UserRepository } from "@applica
 import { CheckInUseCase } from "@application/use-cases";
 import { authMiddleware } from "@presentation/http/express-adapter/middlewares";
 import { JWTAdapter } from "@shared/utils";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 
 export function checkIn(repositories: Repositories) {
   const router = Router();

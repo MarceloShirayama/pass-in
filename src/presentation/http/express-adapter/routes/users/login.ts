@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { UserLoginUseCase } from "@application/use-cases";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 import { JWTAdapter } from "@shared/utils";
 
 export function login(repositories: Repositories) {

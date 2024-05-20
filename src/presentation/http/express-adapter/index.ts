@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 import {
   handleErrorsMiddleware, routeNotFoundMiddleware
 } from "@presentation/http/express-adapter/middlewares";

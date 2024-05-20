@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { RegisterEventUseCase } from "@/application/use-cases";
 import { JWTAdapter } from "@/shared/utils";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 import { authMiddleware } from "@presentation/http/express-adapter/middlewares";
 
 export function register(repositories: Repositories) {

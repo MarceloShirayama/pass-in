@@ -2,7 +2,7 @@ import {
   InvalidParamError, NotFoundError
 } from "@/shared/error";
 import { ViewEventUseCase } from "@application/use-cases";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 import { Router } from "express";
 
 export function getByTitle(repositories: Repositories) {

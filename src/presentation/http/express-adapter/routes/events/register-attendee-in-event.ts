@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { RegisterAttendeeInEventUseCase } from "@application/use-cases";
-import { Repositories } from "@infra/factories";
+import { Repositories } from "@application/repositories";
 import { authMiddleware } from "@presentation/http/express-adapter/middlewares";
 import { JWTAdapter } from "@shared/utils";
 

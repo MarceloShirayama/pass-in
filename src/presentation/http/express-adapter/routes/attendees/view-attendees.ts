@@ -4,7 +4,7 @@ import { ViewAttendeesUseCase } from "@application/use-cases";
 import { inMemoryUserRepository } from "@infra/repositories";
 import { authMiddleware } from '../../middlewares';
 import { JWTAdapter } from '@shared/utils';
-import { Repositories } from '@infra/factories';
+import { Repositories } from '@application/repositories';
 
 export function viewAttendees(repositories: Repositories) {
   const router = Router();
