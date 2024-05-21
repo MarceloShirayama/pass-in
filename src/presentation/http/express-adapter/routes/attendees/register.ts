@@ -1,8 +1,7 @@
 import { Router } from "express";
 
-import { UserRepository } from "@application/repositories";
-import { RegisterUserAttendeeUseCase } from "@application/use-cases";
 import { Repositories } from "@application/repositories";
+import { RegisterUserAttendeeUseCase } from "@application/use-cases";
 
 export function register(repositories: Repositories) {
   const router = Router();
