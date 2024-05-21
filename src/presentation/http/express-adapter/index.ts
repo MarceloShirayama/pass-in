@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import cors from "cors";
 
 import { Repositories } from "@application/repositories";
 import {
@@ -17,6 +18,7 @@ export class ExpressAdapter implements HttpServer {
   ) {
     this.#application = express()
     this.#setupServerHeaders()
+    this.#setupCors()
     this.#setupRoutes()
     this.#setupErrorHandler()
   }
@@ -24,6 +26,10 @@ export class ExpressAdapter implements HttpServer {
   #setupServerHeaders() {
     this.#application.use(express.json())
     this.#application.disable('x-powered-by')
+  }
+
+  #setupCors() {
+    this.#application.use(cors())
   }
 
   #setupErrorHandler() {
